@@ -13,7 +13,8 @@ def get_data(imageId):
 
     print(url)
 
-    response = requests.get(url)
+    response = request_with_retry(url)
+
     if response.status_code == 200:
         try:
             data = response.json()
@@ -37,6 +38,10 @@ def get_data(imageId):
     else:
         print(response.text)
         print(response.status_code)
+
+@retry(stop_max_attempt_number=5, wait_fixed=2000)
+def request_with_retry(url):
+    return requests.get(url)
 
 @retry(stop_max_attempt_number=5, wait_fixed=2000)
 def urlretrieve_with_retry(url, path):
