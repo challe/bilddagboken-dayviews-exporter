@@ -24,7 +24,13 @@ def get_data(imageId):
             path = folder + "/" + imageName + ".png"
 
             if not os.path.exists(path):
-                urlretrieve_with_retry(data["HDSizeSRC"], path)
+                try:
+                    urlretrieve_with_retry(data["HDSizeSRC"], path)
+                    time.sleep(3)
+
+                except urllib.error.HTTPError:
+                    print("Could not find the image: " + data["HDSizeSRC"])
+                    
                 time.sleep(3)
             
             time.sleep(3)
